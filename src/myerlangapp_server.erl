@@ -1,9 +1,10 @@
 %%%-------------------------------------------------------------------
 %% @doc myerlangapp counter server.
 %%
-%% Holds a single integer counter in its state. Kept deliberately
-%% simple in 0.1.0 so that changing its state shape in a later version
-%% gives rebar3_jellyfish_plugin a real code_change to generate.
+%% Holds a single integer counter in its state. Its state shape is
+%% intentionally left alone across 0.1.0 -> 0.2.0: this module exports
+%% no code_change/3 in 0.1.0, so an upgrade from that version would
+%% never run one anyway, regardless of what 0.2.0 adds.
 %% @end
 %%%-------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ init([]) ->
 
 handle_call({bump, N}, _From, State = #state{count = Count}) ->
     NewCount = Count + N,
+    myerlangapp_history_server:record_bump(),
     {reply, NewCount, State#state{count = NewCount}};
 handle_call(get_count, _From, State = #state{count = Count}) ->
     {reply, Count, State};

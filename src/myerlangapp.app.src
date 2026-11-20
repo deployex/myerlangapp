@@ -1,7 +1,7 @@
 {application, myerlangapp, [
     {description, "Single-app counterpart to medusa, used to exercise rebar3_jellyfish_plugin hot upgrades"},
-    {vsn, "0.1.0"},
-    {registered, [myerlangapp_sup, myerlangapp_server, myerlangapp_listener]},
+    {vsn, "0.2.0"},
+    {registered, [myerlangapp_sup, myerlangapp_server, myerlangapp_listener, myerlangapp_history_server]},
     {mod, {myerlangapp_app, []}},
     {applications, [
         kernel,
