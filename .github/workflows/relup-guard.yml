@@ -1,0 +1,23 @@
+name: Verify hot upgrade
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  relup-guard-erlang:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: erlef/setup-beam@v1
+        with:
+          version-file: .tool-versions
+          version-type: strict
+
+      - uses: deployex/relup-guard-erlang@v1
+        with:
+          old-ref: ${{ github.event.pull_request.base.sha }}
+          release-name: myerlangapp
