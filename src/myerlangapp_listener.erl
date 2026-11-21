@@ -14,7 +14,7 @@
 -export([start_link/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 
--define(PORT, 8080).
+-define(DEFAULT_PORT, 8080).
 -define(ACCEPT_TIMEOUT, 1000).
 -define(RECV_TIMEOUT, 5000).
 
@@ -22,7 +22,8 @@ start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
-    {ok, ListenSocket} = gen_tcp:listen(?PORT, [
+    Port = application:get_env(myerlangapp, port, ?DEFAULT_PORT),
+    {ok, ListenSocket} = gen_tcp:listen(Port, [
         binary,
         {packet, http_bin},
         {active, false},
