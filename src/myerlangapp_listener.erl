@@ -22,7 +22,7 @@ start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
-    Port = application:get_env(myerlangapp, port, ?DEFAULT_PORT),
+    Port = get_port(),
     {ok, ListenSocket} = gen_tcp:listen(Port, [
         binary,
         {packet, http_bin},
@@ -51,6 +51,15 @@ handle_info(_Info, State) ->
     {noreply, State}.
 
 %% internal functions
+
+%% DeployEx injects the PORT environment variable per replica (see
+%% replica_ports in deployex.yaml/dev.override.exs). Falling back to the
+%% sys.config/app env value keeps this runnable outside DeployEx too.
+get_port() ->
+    case os:getenv("PORT") of
+        false -> application:get_env(myerlangapp, port, ?DEFAULT_PORT);
+        PortStr -> list_to_integer(PortStr)
+    end.
 
 handle_connection(Socket) ->
     case gen_tcp:recv(Socket, 0, ?RECV_TIMEOUT) of
