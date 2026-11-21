@@ -24,6 +24,14 @@ init([]) ->
     },
     ChildSpecs = [
         #{
+            id => myerlangapp_history_server,
+            start => {myerlangapp_history_server, start_link, []},
+            restart => permanent,
+            shutdown => 5000,
+            type => worker,
+            modules => [myerlangapp_history_server]
+        },
+        #{
             id => myerlangapp_server,
             start => {myerlangapp_server, start_link, []},
             restart => permanent,

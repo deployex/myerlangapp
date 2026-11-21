@@ -70,7 +70,9 @@ consume_headers(Socket) ->
     end.
 
 respond(Socket, 'GET', {abs_path, <<"/">>}) ->
-    send_html(Socket, 200, myerlangapp_page:render(myerlangapp_server:get_count()));
+    Count = myerlangapp_server:get_count(),
+    Bumps = myerlangapp_history_server:get_bumps(),
+    send_html(Socket, 200, myerlangapp_page:render(Count, Bumps));
 respond(Socket, 'GET', {abs_path, <<"/bump">>}) ->
     myerlangapp_server:bump(),
     send_redirect(Socket, "/");
