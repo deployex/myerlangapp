@@ -1,16 +1,15 @@
 %%%-------------------------------------------------------------------
 %% @doc myerlangapp counter server.
 %%
-%% Holds a single integer counter in its state. 0.2.1 adds
-%% code_change/3 as a no-op pass-through. rebar3_jellyfish_plugin
-%% decides the instruction it generates for a module from the
-%% currently-deployed version's own exports, not the incoming one, so
-%% an upgrade away from 0.2.0 (which exports no code_change/3, same as
-%% 0.1.0 before it) can never use the advanced/code_change path
-%% regardless of what the target adds. Exporting it now makes 0.2.1 a
-%% valid baseline for that: a later version that changes this state's
-%% shape can finally get a real code_change generated, once what is
-%% running is 0.2.1 or later.
+%% Holds a single integer counter in its state. 0.2.1 added
+%% code_change/3 as a no-op, purely so a running 0.2.1 would be a
+%% valid baseline for this: rebar3_jellyfish_plugin decides the
+%% instruction it generates for a module from the currently-deployed
+%% version's own exports, not the incoming one, so an upgrade away
+%% from 0.2.0 (which exports no code_change/3) could never use the
+%% advanced/code_change path regardless of what the target added.
+%% 0.2.2 is the payoff: upgrading from 0.2.1 onward now runs the
+%% print below for real, instead of a plain load_module.
 %% @end
 %%%-------------------------------------------------------------------
 
@@ -56,4 +55,5 @@ handle_cast(_Msg, State) ->
     {noreply, State}.
 
 code_change(_OldVsn, State, _Extra) ->
+    io:format("( ͡° ͜ʖ ͡°)_/¯ myerlangapp just hot-upgraded itself, counter kept intact~n"),
     {ok, State}.
