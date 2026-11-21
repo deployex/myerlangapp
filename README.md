@@ -28,3 +28,4 @@ Then open <http://127.0.0.1:8080/>.
  * `0.2.1` - adds `code_change/3` to `myerlangapp_server` as a no-op pass-through. The 0.2.0 -> 0.2.1 appup is still a plain `load_module` for that module, since the plugin decides the instruction from the currently-deployed version's exports, not the incoming one. This version is a baseline: once it is what is running, a later release that changes `myerlangapp_server`'s state shape can get a real `code_change` instruction generated against it.
  * `0.2.2` - `code_change/3` now prints a message instead of being a no-op. Upgrading from 0.2.1 onward, the appup is a real `{update, myerlangapp_server, {advanced, []}}`, so this is the first version where that print actually runs during a hot upgrade rather than just being generated and skipped.
  * `0.2.3` - Default PORT is now configurable by env VAR
+ * `0.2.4` - Adding `code_change/3`
